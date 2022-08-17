@@ -28,8 +28,8 @@ class LinksImportService(
         log.info("Importing links from file: {}", fileName)
         var count = 0L
 
-        val file: ClassPathResource = ClassPathResource(fileName, this.javaClass)
-        val inputStreamReader = InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8)
+        val file = ClassPathResource(fileName, this.javaClass)
+        val inputStreamReader = InputStreamReader(file.inputStream, StandardCharsets.UTF_8)
         val csvReader = CSVReader(inputStreamReader)
         csvReader.skip(1)
         val iterator = CSVIterator(csvReader)

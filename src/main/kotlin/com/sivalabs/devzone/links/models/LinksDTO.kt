@@ -22,13 +22,13 @@ class LinksDTO(bookmarksPage: Page<LinkDTO>) {
     var hasPrevious = false
 
     init {
-        this.data = (bookmarksPage.content)
-        this.totalElements = (bookmarksPage.totalElements)
-        this.pageNumber = (bookmarksPage.number + 1) // 1 - based page numbering
-        this.totalPages = (bookmarksPage.totalPages)
-        this.isFirst = (bookmarksPage.isFirst)
-        this.isLast = (bookmarksPage.isLast)
-        this.hasNext = (bookmarksPage.hasNext())
-        this.hasPrevious = (bookmarksPage.hasPrevious())
+        this.data = bookmarksPage.content
+        this.totalElements = bookmarksPage.totalElements
+        this.pageNumber = bookmarksPage.number + 1 // 1 - based page numbering
+        this.totalPages = bookmarksPage.totalPages
+        this.isFirst = bookmarksPage.isFirst
+        this.isLast = bookmarksPage.isLast
+        this.hasNext = bookmarksPage.hasNext()
+        this.hasPrevious = bookmarksPage.hasPrevious()
     }
 }

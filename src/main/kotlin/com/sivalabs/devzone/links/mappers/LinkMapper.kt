@@ -11,8 +11,10 @@ class LinkMapper {
         dto.id = link.id
         dto.url = link.url
         dto.title = link.title
-        dto.createdUserId = link.createdBy!!.id
-        dto.createdUserName = link.createdBy!!.name
+        if (link.createdBy != null) {
+            dto.createdUserId = link.createdBy?.id
+            dto.createdUserName = link.createdBy?.name
+        }
         dto.createdAt = link.createdAt
         dto.updatedAt = link.updatedAt
         dto.tags = link.tags.map { it.name }.toMutableList()
