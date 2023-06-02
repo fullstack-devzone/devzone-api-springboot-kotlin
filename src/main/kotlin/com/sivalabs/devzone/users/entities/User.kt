@@ -1,21 +1,21 @@
 package com.sivalabs.devzone.users.entities
 
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.PrePersist
+import jakarta.persistence.PreUpdate
+import jakarta.persistence.SequenceGenerator
+import jakarta.persistence.Table
+import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.Size
 import java.io.Serializable
 import java.time.LocalDateTime
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.PrePersist
-import javax.persistence.PreUpdate
-import javax.persistence.SequenceGenerator
-import javax.persistence.Table
-import javax.validation.constraints.Email
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.Size
 
 @Entity
 @Table(name = "users")
@@ -57,5 +57,13 @@ class User : Serializable {
     @PreUpdate
     fun onUpdate() {
         updatedAt = LocalDateTime.now()
+    }
+
+    fun isCurrentUserAdmin(): Boolean {
+        return isUserHasAnyRole(RoleEnum.ROLE_ADMIN)
+    }
+
+    private fun isUserHasAnyRole(vararg roles: RoleEnum): Boolean {
+        return listOf(*roles).contains(this.role)
     }
 }

@@ -8,10 +8,10 @@ import java.lang.annotation.Inherited
     AnnotationTarget.PROPERTY_GETTER,
     AnnotationTarget.PROPERTY_SETTER,
     AnnotationTarget.ANNOTATION_CLASS,
-    AnnotationTarget.CLASS
+    AnnotationTarget.CLASS,
 )
 @Retention(AnnotationRetention.RUNTIME)
 @Inherited
 @MustBeDocumented
-@PreAuthorize("hasRole('ROLE_ADMIN')")
+@PreAuthorize("hasRole('ADMIN')")
 annotation class AdminOnly

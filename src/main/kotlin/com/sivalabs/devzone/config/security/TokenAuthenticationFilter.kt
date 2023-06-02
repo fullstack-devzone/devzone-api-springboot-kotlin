@@ -1,26 +1,26 @@
 package com.sivalabs.devzone.config.security
 
+import jakarta.servlet.FilterChain
+import jakarta.servlet.ServletException
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import java.io.IOException
-import javax.servlet.FilterChain
-import javax.servlet.ServletException
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 @Component
 class TokenAuthenticationFilter(
     private val tokenHelper: TokenHelper,
-    private val userDetailsService: UserDetailsService
+    private val userDetailsService: UserDetailsService,
 ) : OncePerRequestFilter() {
 
     @Throws(IOException::class, ServletException::class)
     public override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        chain: FilterChain
+        chain: FilterChain,
     ) {
         val authToken = tokenHelper.getToken(request)
         if (authToken != null) {

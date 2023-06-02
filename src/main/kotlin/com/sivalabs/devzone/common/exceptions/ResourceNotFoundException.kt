@@ -1,3 +1,3 @@
 package com.sivalabs.devzone.common.exceptions
 
-class ResourceNotFoundException(message: String) : ApplicationException(message)
+class ResourceNotFoundException(message: String) : DevZoneException(message)

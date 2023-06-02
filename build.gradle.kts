@@ -7,14 +7,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
-    id("org.springframework.boot") version "2.7.2"
-    id("io.spring.dependency-management") version "1.0.12.RELEASE"
+    id("org.springframework.boot") version "3.1.0"
+    id("io.spring.dependency-management") version "1.1.0"
     id("com.gorylenko.gradle-git-properties") version "2.4.1"
-    id("com.diffplug.spotless") version "6.9.0"
-    id("com.google.cloud.tools.jib") version "3.2.1"
-    kotlin("jvm") version "1.7.10"
-    kotlin("plugin.spring") version "1.7.10"
-    kotlin("plugin.jpa") version "1.7.10"
+    id("com.diffplug.spotless") version "6.19.0"
+    kotlin("jvm") version "1.8.21"
+    kotlin("plugin.spring") version "1.8.21"
+    kotlin("plugin.jpa") version "1.8.21"
 }
 
 group = "com.sivalabs"
@@ -36,21 +35,15 @@ configurations {
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url = uri("https://repo.spring.io/milestone") }
-    maven { url = uri("https://repo.spring.io/snapshot") }
 }
 
 ext {
-    set("spring_cloud_version", "2021.0.3")
-    set("testcontainers_version", "1.17.3")
-    set("springdoc_openapi_version", "1.6.9")
-    set("jsoup_version", "1.15.2")
+    set("springdoc_openapi_version", "1.7.0")
     set("commons_lang_version", "3.12.0")
-    set("commons_io_version", "2.11.0")
-    set("opencsv_version", "5.6")
-    set("jjwt_version", "0.9.1")
-    set("problem_spring_web_version", "0.27.0")
-    set("archunit_version", "0.23.1")
+    set("commons_io_version", "2.12.0")
+    set("opencsv_version", "5.7.1")
+    set("jjwt_version", "0.11.5")
+    set("instancio_version", "2.16.0")
 }
 
 dependencies {
@@ -60,37 +53,30 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("io.jsonwebtoken:jjwt:${property("jjwt_version")}")
-    implementation("org.zalando:problem-spring-web-starter:${property("problem_spring_web_version")}")
+    implementation("io.jsonwebtoken:jjwt-api:${property("jjwt_version")}")
+    implementation("io.jsonwebtoken:jjwt-impl:${property("jjwt_version")}")
+    implementation("io.jsonwebtoken:jjwt-jackson:${property("jjwt_version")}")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     implementation("org.flywaydb:flyway-core")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-    runtimeOnly("com.h2database:h2")
+    testImplementation("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     implementation("org.springdoc:springdoc-openapi-ui:${property("springdoc_openapi_version")}")
     implementation("com.opencsv:opencsv:${property("opencsv_version")}")
-    implementation("org.jsoup:jsoup:${property("jsoup_version")}")
     implementation("org.apache.commons:commons-lang3:${property("commons_lang_version")}")
     implementation("commons-io:commons-io:${property("commons_io_version")}")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
-    testImplementation("com.tngtech.archunit:archunit-junit5:${property("archunit_version")}")
-}
-
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("spring_cloud_version")}")
-        mavenBom("org.testcontainers:testcontainers-bom:${property("testcontainers_version")}")
-    }
+    testImplementation("io.rest-assured:rest-assured")
+    testImplementation("org.instancio:instancio-junit:${property("instancio_version")}")
 }
 
 tasks.withType<KotlinCompile> {
@@ -110,23 +96,7 @@ tasks.withType<Test> {
 }
 
 tasks.named<BootBuildImage>("bootBuildImage") {
-    imageName = "sivaprasadreddy/devzone-api-springboot-kotlin"
-}
-
-jib {
-    from {
-        image = "eclipse-temurin:17-jre-focal"
-    }
-    to {
-        image = "sivaprasadreddy/devzone-api-springboot-kotlin"
-        tags = setOf("latest")
-    }
-    container {
-        jvmFlags = listOf("-Xms512m", "-Xdebug")
-        mainClass = "com.sivalabs.devzone.ApplicationKt"
-        args = listOf()
-        ports = listOf("8080/tcp")
-    }
+    imageName.set("sivaprasadreddy/devzone-api-springboot-kotlin")
 }
 
 gitProperties {
@@ -135,7 +105,7 @@ gitProperties {
         "git.branch",
         "git.commit.id.abbrev",
         "git.commit.user.name",
-        "git.commit.message.full"
+        "git.commit.message.full",
     )
 }
 
@@ -149,11 +119,5 @@ spotless {
     kotlinGradle {
         target("*.gradle.kts")
         ktlint()
-    }
-}
-
-tasks {
-    wrapper {
-        gradleVersion = "7.5"
     }
 }

@@ -14,16 +14,15 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api")
 @SecurityRequirement(name = "bearerAuth")
 class AuthUserController(
-    private val securityUtils: SecurityUtils
+    private val securityUtils: SecurityUtils,
 ) {
 
-    @GetMapping("/auth/me")
+    @GetMapping("/me")
     @AnyAuthenticatedUser
     fun me(): ResponseEntity<AuthUserDTO> {
         val loginUser = securityUtils.loginUser()
         if (loginUser != null) {
             val userDTO = AuthUserDTO(loginUser.name!!, loginUser.email!!, loginUser.role!!)
-
             return ResponseEntity.ok(userDTO)
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()

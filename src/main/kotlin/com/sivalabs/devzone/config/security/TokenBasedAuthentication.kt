@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails
 
 class TokenBasedAuthentication(
     private val token: String,
-    private val principle: UserDetails
+    private val principle: UserDetails,
 ) : AbstractAuthenticationToken(principle.authorities) {
 
     override fun isAuthenticated(): Boolean {

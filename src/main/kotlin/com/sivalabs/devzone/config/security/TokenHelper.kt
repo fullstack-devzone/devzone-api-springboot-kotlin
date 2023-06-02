@@ -1,21 +1,23 @@
 package com.sivalabs.devzone.config.security
 
-import com.sivalabs.devzone.common.exceptions.ApplicationException
+import com.sivalabs.devzone.common.exceptions.DevZoneException
 import com.sivalabs.devzone.common.logging.logger
 import com.sivalabs.devzone.config.ApplicationProperties
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.security.Keys
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
+import java.nio.charset.StandardCharsets
 import java.util.*
-import javax.servlet.http.HttpServletRequest
 
 @Component
 class TokenHelper(private val applicationProperties: ApplicationProperties) {
     companion object {
         private val log = logger()
-        private val SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512
+        private val SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256
         private const val AUDIENCE_WEB = "web"
     }
 
@@ -30,24 +32,31 @@ class TokenHelper(private val applicationProperties: ApplicationProperties) {
     }
 
     fun generateToken(username: String): String {
+        val secretString = applicationProperties.jwt.secret
+        val key = Keys.hmacShaKeyFor(secretString.toByteArray(StandardCharsets.UTF_8))
+
         return Jwts.builder()
             .setIssuer(applicationProperties.jwt.issuer)
             .setSubject(username)
             .setAudience(AUDIENCE_WEB)
             .setIssuedAt(Date())
             .setExpiration(generateExpirationDate())
-            .signWith(SIGNATURE_ALGORITHM, applicationProperties.jwt.secret)
+            .signWith(key, SIGNATURE_ALGORITHM)
             .compact()
     }
 
     private fun getAllClaimsFromToken(token: String): Claims {
+        val secretString = applicationProperties.jwt.secret
+        val key = Keys.hmacShaKeyFor(secretString.toByteArray(StandardCharsets.UTF_8))
+
         val claims: Claims = try {
-            Jwts.parser()
-                .setSigningKey(applicationProperties.jwt.secret)
+            Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .body
         } catch (e: Exception) {
-            throw ApplicationException(e)
+            throw DevZoneException(e)
         }
         return claims
     }
@@ -65,7 +74,9 @@ class TokenHelper(private val applicationProperties: ApplicationProperties) {
         val authHeader = getAuthHeaderFromHeader(request)
         return if (authHeader != null && authHeader.startsWith("Bearer ")) {
             authHeader.substring(7)
-        } else null
+        } else {
+            null
+        }
     }
 
     fun getAuthHeaderFromHeader(request: HttpServletRequest): String? {

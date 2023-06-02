@@ -1,6 +1,6 @@
 package com.sivalabs.devzone.config.security
 
-import com.sivalabs.devzone.users.models.UserDTO
+import com.sivalabs.devzone.users.entities.User
 import com.sivalabs.devzone.users.services.UserService
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 @Component
 class SecurityUtils(private val userService: UserService) {
 
-    fun loginUser(): UserDTO? {
+    fun loginUser(): User? {
         val authentication: Authentication = SecurityContextHolder.getContext().authentication
         if (authentication.principal == null) {
             return null

@@ -1,6 +1,6 @@
 package com.sivalabs.devzone.config.security
 
-import com.sivalabs.devzone.users.models.UserDTO
+import com.sivalabs.devzone.users.entities.User
 import com.sivalabs.devzone.users.services.UserService
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -12,10 +12,10 @@ class SecurityUserDetailsService(private val userService: UserService) : UserDet
     override fun loadUserByUsername(username: String): UserDetails? {
         return userService
             .getUserByEmail(username)
-            .map { user: UserDTO -> SecurityUser(user) }
+            .map { user: User -> SecurityUser(user) }
             .orElseThrow {
                 UsernameNotFoundException(
-                    "No user found with username $username"
+                    "No user found with username $username",
                 )
             }
     }

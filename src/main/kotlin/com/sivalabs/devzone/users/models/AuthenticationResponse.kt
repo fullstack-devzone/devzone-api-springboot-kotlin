@@ -11,5 +11,5 @@ data class AuthenticationResponse(
     val expiresAt: LocalDateTime,
 
     @JsonProperty("user")
-    val user: AuthUserDTO
+    val user: AuthUserDTO,
 )

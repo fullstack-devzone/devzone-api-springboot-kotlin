@@ -22,14 +22,14 @@ class CurrentUserArgumentResolver(private val securityService: SecurityService) 
         methodParameter: MethodParameter,
         @Nullable mavContainer: ModelAndViewContainer?,
         nativeWebRequest: NativeWebRequest,
-        @Nullable binderFactory: WebDataBinderFactory?
+        @Nullable binderFactory: WebDataBinderFactory?,
     ): Any? {
         return securityService.loginUser()
     }
 
     private fun <T : Annotation?> findMethodAnnotation(
         annotationClass: Class<T>,
-        parameter: MethodParameter
+        parameter: MethodParameter,
     ): T? {
         var annotation = parameter.getParameterAnnotation(annotationClass)
         if (annotation != null) {
