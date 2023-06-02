@@ -1,2 +1,2 @@
 # devzone-api-springboot-kotlin
-DevZone API using SpringBoot + Kotlin
+DevZone API using Spring Boot + Kotlin
