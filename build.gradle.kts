@@ -41,7 +41,7 @@ repositories {
 }
 
 ext {
-    set("spring_cloud_version", "2021.0.3")
+    set("spring_cloud_version", "2021.0.7")
     set("testcontainers_version", "1.17.3")
     set("springdoc_openapi_version", "1.6.9")
     set("jsoup_version", "1.15.2")
