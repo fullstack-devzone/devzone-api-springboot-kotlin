@@ -24,6 +24,6 @@ internal class AuthUserControllerTests : AbstractIntegrationTest() {
     @Test
     fun shouldFailToGetLoginUserDetailsIfUnauthorized() {
         given().get("/api/me")
-            .then().statusCode(401)
+            .then().statusCode(403)
     }
 }
