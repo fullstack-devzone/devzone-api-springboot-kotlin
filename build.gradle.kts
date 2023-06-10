@@ -39,7 +39,7 @@ repositories {
 
 extra["springdoc_openapi_version"] = "1.7.0"
 extra["commons_lang_version"] = "3.12.0"
-extra["commons_io_version"] = "2.12.0"
+extra["commons_io_version"] = "2.13.0"
 extra["opencsv_version"] = "5.7.1"
 extra["jjwt_version"] = "0.11.5"
 extra["instancio_version"] = "2.16.0"
