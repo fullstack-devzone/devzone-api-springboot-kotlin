@@ -42,7 +42,7 @@ extra["commons_lang_version"] = "3.12.0"
 extra["commons_io_version"] = "2.12.0"
 extra["opencsv_version"] = "5.7.1"
 extra["jjwt_version"] = "0.11.5"
-extra["instancio_version"] = "2.16.0"
+extra["instancio_version"] = "2.16.1"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
