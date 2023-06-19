@@ -11,9 +11,9 @@ plugins {
     id("io.spring.dependency-management") version "1.1.0"
     id("com.gorylenko.gradle-git-properties") version "2.4.1"
     id("com.diffplug.spotless") version "6.19.0"
-    kotlin("jvm") version "1.8.21"
-    kotlin("plugin.spring") version "1.8.21"
-    kotlin("plugin.jpa") version "1.8.21"
+    kotlin("jvm") version "1.8.22"
+    kotlin("plugin.spring") version "1.8.22"
+    kotlin("plugin.jpa") version "1.8.22"
 }
 
 group = "com.sivalabs"
@@ -39,10 +39,10 @@ repositories {
 
 extra["springdoc_openapi_version"] = "1.7.0"
 extra["commons_lang_version"] = "3.12.0"
-extra["commons_io_version"] = "2.12.0"
+extra["commons_io_version"] = "2.13.0"
 extra["opencsv_version"] = "5.7.1"
 extra["jjwt_version"] = "0.11.5"
-extra["instancio_version"] = "2.16.0"
+extra["instancio_version"] = "2.16.1"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
