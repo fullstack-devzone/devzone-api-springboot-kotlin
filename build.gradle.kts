@@ -12,7 +12,7 @@ plugins {
     id("com.gorylenko.gradle-git-properties") version "2.4.1"
     id("com.diffplug.spotless") version "6.19.0"
     kotlin("jvm") version "1.8.22"
-    kotlin("plugin.spring") version "1.8.22"
+    kotlin("plugin.spring") version "1.9.24"
     kotlin("plugin.jpa") version "1.8.22"
 }
 
