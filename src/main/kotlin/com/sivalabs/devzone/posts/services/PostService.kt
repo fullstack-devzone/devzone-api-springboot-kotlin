@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
+import java.util.Optional
 
 @Service
 @Transactional
@@ -28,12 +28,13 @@ class PostService(
 
     @Transactional(readOnly = true)
     fun getAllPosts(page: Int): PagedResult<PostDTO> {
-        val pageable: Pageable = PageRequest.of(
-            if (page < 1) 0 else page - 1,
-            PAGE_SIZE,
-            Sort.Direction.DESC,
-            "createdAt",
-        )
+        val pageable: Pageable =
+            PageRequest.of(
+                if (page < 1) 0 else page - 1,
+                PAGE_SIZE,
+                Sort.Direction.DESC,
+                "createdAt",
+            )
         val pageOfPosts = postRepository.findAll(pageable).map(PostDTO::from)
         return PagedResult(
             pageOfPosts.content,
@@ -44,16 +45,21 @@ class PostService(
     }
 
     @Transactional(readOnly = true)
-    fun searchPosts(query: String, page: Int): PagedResult<PostDTO> {
-        val pageable: Pageable = PageRequest.of(
-            if (page < 1) 0 else page - 1,
-            PAGE_SIZE,
-            Sort.Direction.DESC,
-            "createdAt",
-        )
-        val pageOfPosts: Page<PostDTO> = postRepository
-            .findByTitleContainingIgnoreCase(query, pageable)
-            .map(PostDTO::from)
+    fun searchPosts(
+        query: String,
+        page: Int,
+    ): PagedResult<PostDTO> {
+        val pageable: Pageable =
+            PageRequest.of(
+                if (page < 1) 0 else page - 1,
+                PAGE_SIZE,
+                Sort.Direction.DESC,
+                "createdAt",
+            )
+        val pageOfPosts: Page<PostDTO> =
+            postRepository
+                .findByTitleContainingIgnoreCase(query, pageable)
+                .map(PostDTO::from)
         return PagedResult(
             pageOfPosts.content,
             pageOfPosts.totalElements,

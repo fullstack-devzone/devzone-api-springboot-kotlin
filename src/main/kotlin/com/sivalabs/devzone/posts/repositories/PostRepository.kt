@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface PostRepository : JpaRepository<Post, Long> {
-
     fun findByTitleContainingIgnoreCase(
         @Param("query") query: String,
         pageable: Pageable,

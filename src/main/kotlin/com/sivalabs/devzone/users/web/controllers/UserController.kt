@@ -25,7 +25,9 @@ class UserController(
     }
 
     @GetMapping("/{id}")
-    fun getUser(@PathVariable id: Long): ResponseEntity<UserDTO> {
+    fun getUser(
+        @PathVariable id: Long,
+    ): ResponseEntity<UserDTO> {
         log.info("process=get_user, user_id={}", id)
         return userService
             .getUserById(id)
@@ -35,7 +37,9 @@ class UserController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createUser(@RequestBody @Valid createUserRequest: CreateUserRequest): UserDTO {
+    fun createUser(
+        @RequestBody @Valid createUserRequest: CreateUserRequest,
+    ): UserDTO {
         log.info("process=create_user, user_email={}", createUserRequest.email)
         return userService.createUser(createUserRequest)
     }

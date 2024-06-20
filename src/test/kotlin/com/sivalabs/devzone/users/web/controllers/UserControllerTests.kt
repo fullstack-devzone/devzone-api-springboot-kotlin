@@ -9,7 +9,6 @@ import org.instancio.Instancio
 import org.junit.jupiter.api.Test
 
 class UserControllerTests : AbstractIntegrationTest() {
-
     @Test
     fun shouldFindUserById() {
         val userId = 1L

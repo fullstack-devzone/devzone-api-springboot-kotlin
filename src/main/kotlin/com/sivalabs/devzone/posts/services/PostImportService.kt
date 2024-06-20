@@ -35,12 +35,13 @@ class PostImportService(
         val user = userService.getUserByEmail(SYSTEM_USER_EMAIL).orElseThrow()
         while (iterator.hasNext()) {
             val nextLine = iterator.next()
-            val request = CreatePostRequest(
-                nextLine[1],
-                nextLine[0],
-                nextLine[1],
-                user.id!!,
-            )
+            val request =
+                CreatePostRequest(
+                    nextLine[1],
+                    nextLine[0],
+                    nextLine[1],
+                    user.id!!,
+                )
             postService.createPost(request)
             count++
         }

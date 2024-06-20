@@ -15,7 +15,6 @@ class TokenAuthenticationFilter(
     private val tokenHelper: TokenHelper,
     private val userDetailsService: UserDetailsService,
 ) : OncePerRequestFilter() {
-
     @Throws(IOException::class, ServletException::class)
     public override fun doFilterInternal(
         request: HttpServletRequest,

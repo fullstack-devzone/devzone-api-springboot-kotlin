@@ -2,7 +2,7 @@ package com.sivalabs.devzone.common.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class PagedResult<T> (
+data class PagedResult<T>(
     val data: List<T>,
     val totalElements: Long,
     val pageNumber: Int,

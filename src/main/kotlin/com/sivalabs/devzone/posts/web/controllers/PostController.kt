@@ -50,7 +50,9 @@ class PostController(
     }
 
     @GetMapping("/{id}")
-    fun getPost(@PathVariable id: Long): PostDTO? {
+    fun getPost(
+        @PathVariable id: Long,
+    ): PostDTO? {
         return postService
             .getPostById(id)
             .orElseThrow { ResourceNotFoundException("Post with id: $id not found") }
@@ -64,30 +66,38 @@ class PostController(
         @RequestBody @Valid createPostRequest: CreatePostRequest,
         @CurrentUser loginUser: User,
     ): PostDTO? {
-        val request = CreatePostRequest(
-            createPostRequest.title,
-            createPostRequest.url,
-            createPostRequest.content,
-            loginUser.id!!,
-        )
+        val request =
+            CreatePostRequest(
+                createPostRequest.title,
+                createPostRequest.url,
+                createPostRequest.content,
+                loginUser.id!!,
+            )
         return postService.createPost(request)
     }
 
     @DeleteMapping("/{id}")
     @AnyAuthenticatedUser
     @Operation(summary = "Delete Post", security = [SecurityRequirement(name = "bearerAuth")])
-    fun deletePost(@PathVariable id: Long, @CurrentUser loginUser: User): ResponseEntity<Void?>? {
-        val post = postService.getPostById(id).orElseThrow {
-            ResourceNotFoundException(
-                "Post not found",
-            )
-        }
+    fun deletePost(
+        @PathVariable id: Long,
+        @CurrentUser loginUser: User,
+    ): ResponseEntity<Void?>? {
+        val post =
+            postService.getPostById(id).orElseThrow {
+                ResourceNotFoundException(
+                    "Post not found",
+                )
+            }
         checkPrivilege(post, loginUser)
         postService.deletePost(id)
         return ResponseEntity.ok().build()
     }
 
-    private fun checkPrivilege(post: PostDTO, loginUser: User) {
+    private fun checkPrivilege(
+        post: PostDTO,
+        loginUser: User,
+    ) {
         if (!(post.createdBy?.id == loginUser.id || loginUser.isCurrentUserAdmin())) {
             throw UnauthorisedAccessException("Unauthorised Access")
         }

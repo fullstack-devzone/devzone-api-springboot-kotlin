@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class SecurityUtils(private val userService: UserService) {
-
     fun loginUser(): User? {
         val authentication: Authentication = SecurityContextHolder.getContext().authentication
         if (authentication.principal == null) {

@@ -9,10 +9,9 @@ import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
+import java.util.UUID
 
 class AuthenticationControllerTests : AbstractIntegrationTest() {
-
     @Autowired
     private lateinit var userService: UserService
 

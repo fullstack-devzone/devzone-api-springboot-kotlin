@@ -3,17 +3,16 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
-    id("org.springframework.boot") version "3.1.0"
-    id("io.spring.dependency-management") version "1.1.0"
-    id("com.gorylenko.gradle-git-properties") version "2.4.1"
-    id("com.diffplug.spotless") version "6.19.0"
-    kotlin("jvm") version "1.8.22"
-    kotlin("plugin.spring") version "1.8.22"
-    kotlin("plugin.jpa") version "1.8.22"
+    id("org.springframework.boot") version "3.3.0"
+    id("io.spring.dependency-management") version "1.1.5"
+    id("com.gorylenko.gradle-git-properties") version "2.4.2"
+    id("com.diffplug.spotless") version "6.25.0"
+    kotlin("jvm") version "2.0.0"
+    kotlin("plugin.spring") version "2.0.0"
+    kotlin("plugin.jpa") version "2.0.0"
 }
 
 group = "com.sivalabs"
@@ -21,8 +20,7 @@ version = "0.0.1"
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-        vendor.set(JvmVendorSpec.ADOPTIUM)
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
@@ -37,12 +35,11 @@ repositories {
     mavenCentral()
 }
 
-extra["springdoc_openapi_version"] = "1.7.0"
-extra["commons_lang_version"] = "3.12.0"
+extra["springdoc_openapi_version"] = "2.5.0"
 extra["commons_io_version"] = "2.13.0"
-extra["opencsv_version"] = "5.7.1"
+extra["opencsv_version"] = "5.9"
 extra["jjwt_version"] = "0.11.5"
-extra["instancio_version"] = "2.16.1"
+extra["instancio_version"] = "4.8.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -59,13 +56,14 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     implementation("org.flywaydb:flyway-core")
+    implementation("org.flywaydb:flyway-database-postgresql")
     testImplementation("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-    implementation("org.springdoc:springdoc-openapi-ui:${property("springdoc_openapi_version")}")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("springdoc_openapi_version")}")
     implementation("com.opencsv:opencsv:${property("opencsv_version")}")
-    implementation("org.apache.commons:commons-lang3:${property("commons_lang_version")}")
+    implementation("org.apache.commons:commons-lang3")
     implementation("commons-io:commons-io:${property("commons_io_version")}")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -77,10 +75,9 @@ dependencies {
     testImplementation("org.instancio:instancio-junit:${property("instancio_version")}")
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "17"
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll("-Xjsr305=strict")
     }
 }
 
@@ -99,12 +96,13 @@ tasks.named<BootBuildImage>("bootBuildImage") {
 
 gitProperties {
     failOnNoGitDirectory = false
-    keys = listOf(
-        "git.branch",
-        "git.commit.id.abbrev",
-        "git.commit.user.name",
-        "git.commit.message.full",
-    )
+    keys =
+        listOf(
+            "git.branch",
+            "git.commit.id.abbrev",
+            "git.commit.user.name",
+            "git.commit.message.full",
+        )
 }
 
 spotless {

@@ -7,7 +7,6 @@ class TokenBasedAuthentication(
     private val token: String,
     private val principle: UserDetails,
 ) : AbstractAuthenticationToken(principle.authorities) {
-
     override fun isAuthenticated(): Boolean {
         return true
     }

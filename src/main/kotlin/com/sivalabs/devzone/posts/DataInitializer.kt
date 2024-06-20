@@ -15,7 +15,6 @@ class DataInitializer(
     private val postService: PostService,
     private val postImportService: PostImportService,
 ) : CommandLineRunner {
-
     companion object {
         private val log = logger()
     }

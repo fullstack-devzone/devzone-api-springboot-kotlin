@@ -5,11 +5,10 @@ import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest(
     properties = [
-        "spring.datasource.url=jdbc:tc:postgresql:15.3-alpine:///testdb",
+        "spring.datasource.url=jdbc:tc:postgresql:16-alpine:///testdb",
     ],
 )
 class ApplicationTests {
-
     @Test
     fun contextLoads() {
     }

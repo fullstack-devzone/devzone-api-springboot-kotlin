@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletRequest
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
-import java.util.*
+import java.util.Date
 
 @Component
 class TokenHelper(private val applicationProperties: ApplicationProperties) {
@@ -49,15 +49,16 @@ class TokenHelper(private val applicationProperties: ApplicationProperties) {
         val secretString = applicationProperties.jwt.secret
         val key = Keys.hmacShaKeyFor(secretString.toByteArray(StandardCharsets.UTF_8))
 
-        val claims: Claims = try {
-            Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .body
-        } catch (e: Exception) {
-            throw DevZoneException(e)
-        }
+        val claims: Claims =
+            try {
+                Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .body
+            } catch (e: Exception) {
+                throw DevZoneException(e)
+            }
         return claims
     }
 
@@ -65,7 +66,10 @@ class TokenHelper(private val applicationProperties: ApplicationProperties) {
         return Date(System.currentTimeMillis() + applicationProperties.jwt.expiresIn * 1000)
     }
 
-    fun validateToken(token: String, userDetails: UserDetails): Boolean {
+    fun validateToken(
+        token: String,
+        userDetails: UserDetails,
+    ): Boolean {
         val username = getUsernameFromToken(token)
         return username != null && username == userDetails.username
     }

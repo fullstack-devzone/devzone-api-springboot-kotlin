@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController
 class AuthUserController(
     private val securityUtils: SecurityUtils,
 ) {
-
     @GetMapping("/me")
     @AnyAuthenticatedUser
     fun me(): ResponseEntity<AuthUserDTO> {

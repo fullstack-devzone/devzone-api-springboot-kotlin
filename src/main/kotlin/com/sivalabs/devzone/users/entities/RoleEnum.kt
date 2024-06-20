@@ -3,7 +3,10 @@ package com.sivalabs.devzone.users.entities
 import java.util.stream.Collectors
 
 enum class RoleEnum {
-    ROLE_ADMIN, ROLE_MODERATOR, ROLE_USER;
+    ROLE_ADMIN,
+    ROLE_MODERATOR,
+    ROLE_USER,
+    ;
 
     companion object {
         fun getRoleHierarchy(): String {

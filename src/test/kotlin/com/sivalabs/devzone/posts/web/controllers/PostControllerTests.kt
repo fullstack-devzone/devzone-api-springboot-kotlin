@@ -96,12 +96,12 @@ internal class PostControllerTests : AbstractIntegrationTest() {
             .header(properties.jwt.header, "Bearer $jwtToken")
             .body(
                 """
-                        {
-                            "title": "SivaLabs Blog",
-                            "url": "https://sivalabs.in",
-                            "content": "java blog"
-                        }
-                        
+                {
+                    "title": "SivaLabs Blog",
+                    "url": "https://sivalabs.in",
+                    "content": "java blog"
+                }
+                
                 """.trimIndent(),
             )
             .post("/api/posts")
@@ -117,10 +117,10 @@ internal class PostControllerTests : AbstractIntegrationTest() {
         given().contentType(ContentType.JSON)
             .body(
                 """
-                        {
-                            "title": "SivaLabs Blog"
-                        }
-                        
+                {
+                    "title": "SivaLabs Blog"
+                }
+                
                 """.trimIndent(),
             )
             .post("/api/posts")

@@ -25,19 +25,19 @@ class AuthenticationController(
     private val tokenHelper: TokenHelper,
     private val applicationProperties: ApplicationProperties,
 ) {
-
     @PostMapping("/login")
     fun createAuthenticationToken(
         @RequestBody @Valid
         credentials: AuthenticationRequest,
     ): ResponseEntity<AuthenticationResponse> {
         return try {
-            val authentication = authenticationManager.authenticate(
-                UsernamePasswordAuthenticationToken(
-                    credentials.username,
-                    credentials.password,
-                ),
-            )
+            val authentication =
+                authenticationManager.authenticate(
+                    UsernamePasswordAuthenticationToken(
+                        credentials.username,
+                        credentials.password,
+                    ),
+                )
             SecurityContextHolder.getContext().authentication = authentication
             val user: SecurityUser = authentication.principal as SecurityUser
             val accessToken: String = tokenHelper.generateToken(user.username)
@@ -47,7 +47,10 @@ class AuthenticationController(
         }
     }
 
-    private fun getAuthenticationResponse(securityUser: SecurityUser, token: String): AuthenticationResponse {
+    private fun getAuthenticationResponse(
+        securityUser: SecurityUser,
+        token: String,
+    ): AuthenticationResponse {
         val authUserDTO = AuthUserDTO(securityUser.user.name!!, securityUser.user.email!!, securityUser.user.role!!)
         return AuthenticationResponse(
             token,

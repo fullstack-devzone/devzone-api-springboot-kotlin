@@ -13,7 +13,6 @@ import org.springframework.web.method.support.ModelAndViewContainer
 
 @Component
 class CurrentUserArgumentResolver(private val securityService: SecurityService) : HandlerMethodArgumentResolver {
-
     override fun supportsParameter(methodParameter: MethodParameter): Boolean {
         return findMethodAnnotation(CurrentUser::class.java, methodParameter) != null
     }
