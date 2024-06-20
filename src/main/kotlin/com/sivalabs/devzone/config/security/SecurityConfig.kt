@@ -29,9 +29,7 @@ class SecurityConfig {
 
     @Bean
     fun roleHierarchy(): RoleHierarchy {
-        val roleHierarchy = RoleHierarchyImpl()
-        roleHierarchy.setHierarchy(RoleEnum.getRoleHierarchy())
         log.debug("RoleHierarchy: {}", RoleEnum.getRoleHierarchy())
-        return roleHierarchy
+        return RoleHierarchyImpl.fromHierarchy(RoleEnum.getRoleHierarchy())
     }
 }

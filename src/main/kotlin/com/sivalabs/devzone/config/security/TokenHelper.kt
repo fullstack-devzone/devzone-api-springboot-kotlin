@@ -5,7 +5,6 @@ import com.sivalabs.devzone.common.logging.logger
 import com.sivalabs.devzone.config.ApplicationProperties
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.security.core.userdetails.UserDetails
@@ -17,8 +16,6 @@ import java.util.Date
 class TokenHelper(private val applicationProperties: ApplicationProperties) {
     companion object {
         private val log = logger()
-        private val SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256
-        private const val AUDIENCE_WEB = "web"
     }
 
     fun getUsernameFromToken(token: String): String? {
@@ -36,12 +33,11 @@ class TokenHelper(private val applicationProperties: ApplicationProperties) {
         val key = Keys.hmacShaKeyFor(secretString.toByteArray(StandardCharsets.UTF_8))
 
         return Jwts.builder()
-            .setIssuer(applicationProperties.jwt.issuer)
-            .setSubject(username)
-            .setAudience(AUDIENCE_WEB)
-            .setIssuedAt(Date())
-            .setExpiration(generateExpirationDate())
-            .signWith(key, SIGNATURE_ALGORITHM)
+            .issuer(applicationProperties.jwt.issuer)
+            .subject(username)
+            .issuedAt(Date())
+            .expiration(generateExpirationDate())
+            .signWith(key)
             .compact()
     }
 
@@ -51,11 +47,11 @@ class TokenHelper(private val applicationProperties: ApplicationProperties) {
 
         val claims: Claims =
             try {
-                Jwts.parserBuilder()
-                    .setSigningKey(key)
+                Jwts.parser()
+                    .verifyWith(key)
                     .build()
-                    .parseClaimsJws(token)
-                    .body
+                    .parseSignedClaims(token)
+                    .payload
             } catch (e: Exception) {
                 throw DevZoneException(e)
             }
