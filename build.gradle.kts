@@ -38,7 +38,7 @@ repositories {
 extra["springdoc_openapi_version"] = "2.5.0"
 extra["commons_io_version"] = "2.16.1"
 extra["opencsv_version"] = "5.9"
-extra["jjwt_version"] = "0.12.5"
+extra["jjwt_version"] = "0.12.6"
 extra["instancio_version"] = "4.8.0"
 
 dependencies {
