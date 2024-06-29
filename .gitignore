@@ -17,7 +17,7 @@ build/
 .settings
 .springBeans
 .sts4-cache
-
+.kotlin
 ### IntelliJ IDEA ###
 .idea
 *.iws

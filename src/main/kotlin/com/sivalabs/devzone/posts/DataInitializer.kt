@@ -1,9 +1,9 @@
 package com.sivalabs.devzone.posts
 
+import com.sivalabs.devzone.ApplicationProperties
 import com.sivalabs.devzone.common.logging.logger
-import com.sivalabs.devzone.config.ApplicationProperties
-import com.sivalabs.devzone.posts.services.PostImportService
-import com.sivalabs.devzone.posts.services.PostService
+import com.sivalabs.devzone.posts.domain.PostImportService
+import com.sivalabs.devzone.posts.domain.PostService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional

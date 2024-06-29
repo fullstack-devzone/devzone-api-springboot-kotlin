@@ -6,7 +6,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
-    id("org.springframework.boot") version "3.3.0"
+    id("org.springframework.boot") version "3.3.1"
     id("io.spring.dependency-management") version "1.1.5"
     id("com.gorylenko.gradle-git-properties") version "2.4.2"
     id("com.diffplug.spotless") version "6.25.0"
@@ -35,12 +35,6 @@ repositories {
     mavenCentral()
 }
 
-extra["springdoc_openapi_version"] = "2.5.0"
-extra["commons_io_version"] = "2.16.1"
-extra["opencsv_version"] = "5.9"
-extra["jjwt_version"] = "0.12.5"
-extra["instancio_version"] = "4.8.0"
-
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -48,9 +42,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("io.jsonwebtoken:jjwt-api:${property("jjwt_version")}")
-    implementation("io.jsonwebtoken:jjwt-impl:${property("jjwt_version")}")
-    implementation("io.jsonwebtoken:jjwt-jackson:${property("jjwt_version")}")
+    implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+    implementation("io.jsonwebtoken:jjwt-impl:0.12.6")
+    implementation("io.jsonwebtoken:jjwt-jackson:0.12.6")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -61,10 +55,10 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("springdoc_openapi_version")}")
-    implementation("com.opencsv:opencsv:${property("opencsv_version")}")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
+    implementation("com.opencsv:opencsv:5.9")
     implementation("org.apache.commons:commons-lang3")
-    implementation("commons-io:commons-io:${property("commons_io_version")}")
+    implementation("commons-io:commons-io:2.16.1")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
@@ -72,7 +66,7 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
     testImplementation("io.rest-assured:rest-assured")
-    testImplementation("org.instancio:instancio-junit:${property("instancio_version")}")
+    testImplementation("org.instancio:instancio-junit:4.8.1")
 }
 
 kotlin {

@@ -11,7 +11,7 @@ class TestcontainersConfig {
     @Bean
     @ServiceConnection
     @RestartScope
-    fun postgreSQLContainer(): PostgreSQLContainer<*> {
-        return PostgreSQLContainer(TestConstants.POSTGRES_IMAGE)
+    fun postgresContainer(): PostgreSQLContainer<*> {
+        return PostgreSQLContainer("postgres:16-alpine")
     }
 }
