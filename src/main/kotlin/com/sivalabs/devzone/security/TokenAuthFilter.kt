@@ -1,6 +1,6 @@
 package com.sivalabs.devzone.security
 
-import com.sivalabs.devzone.common.logging.logger
+import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -15,9 +15,7 @@ class TokenAuthFilter(
     private val tokenHelper: TokenHelper,
     private val userDetailsService: UserDetailsService,
 ) : OncePerRequestFilter() {
-    companion object {
-        private val log = logger()
-    }
+    private val log = KotlinLogging.logger {}
 
     public override fun doFilterInternal(
         request: HttpServletRequest,

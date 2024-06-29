@@ -2,8 +2,8 @@ package com.sivalabs.devzone.posts.domain
 
 import com.opencsv.CSVIterator
 import com.opencsv.CSVReader
-import com.sivalabs.devzone.common.logging.logger
 import com.sivalabs.devzone.users.domain.UserService
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -16,8 +16,9 @@ class PostImportService(
     private val postService: PostService,
     private val userService: UserService,
 ) {
+    private val log = KotlinLogging.logger {}
+
     companion object {
-        private val log = logger()
         const val SYSTEM_USER_EMAIL = "admin@gmail.com"
     }
 

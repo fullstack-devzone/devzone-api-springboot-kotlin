@@ -2,13 +2,13 @@ package com.sivalabs.devzone.posts.api
 
 import com.sivalabs.devzone.common.exceptions.ResourceNotFoundException
 import com.sivalabs.devzone.common.exceptions.UnauthorisedAccessException
-import com.sivalabs.devzone.common.logging.logger
 import com.sivalabs.devzone.common.models.PagedResult
 import com.sivalabs.devzone.posts.domain.CreatePostRequest
 import com.sivalabs.devzone.posts.domain.PostDTO
 import com.sivalabs.devzone.posts.domain.PostService
 import com.sivalabs.devzone.security.SecurityUtils
 import com.sivalabs.devzone.users.domain.User
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
@@ -31,9 +31,7 @@ class PostController(
     private val postService: PostService,
     private val securityUtils: SecurityUtils,
 ) {
-    companion object {
-        private val log = logger()
-    }
+    private val log = KotlinLogging.logger {}
 
     @GetMapping
     fun getPosts(

@@ -1,9 +1,9 @@
 package com.sivalabs.devzone.posts
 
 import com.sivalabs.devzone.ApplicationProperties
-import com.sivalabs.devzone.common.logging.logger
 import com.sivalabs.devzone.posts.domain.PostImportService
 import com.sivalabs.devzone.posts.domain.PostService
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -15,9 +15,7 @@ class DataInitializer(
     private val postService: PostService,
     private val postImportService: PostImportService,
 ) : CommandLineRunner {
-    companion object {
-        private val log = logger()
-    }
+    private val log = KotlinLogging.logger {}
 
     override fun run(vararg args: String) {
         if (applicationProperties.importDataEnabled) {

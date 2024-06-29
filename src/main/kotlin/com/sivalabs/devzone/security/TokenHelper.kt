@@ -2,7 +2,7 @@ package com.sivalabs.devzone.security
 
 import com.sivalabs.devzone.ApplicationProperties
 import com.sivalabs.devzone.common.exceptions.DevZoneException
-import com.sivalabs.devzone.common.logging.logger
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -14,9 +14,7 @@ import java.util.Date
 
 @Component
 class TokenHelper(private val applicationProperties: ApplicationProperties) {
-    companion object {
-        private val log = logger()
-    }
+    private val log = KotlinLogging.logger {}
 
     fun getUsernameFromToken(token: String): String? {
         try {

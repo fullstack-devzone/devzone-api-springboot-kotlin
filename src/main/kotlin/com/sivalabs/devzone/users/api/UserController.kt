@@ -1,9 +1,9 @@
 package com.sivalabs.devzone.users.api
 
-import com.sivalabs.devzone.common.logging.logger
 import com.sivalabs.devzone.users.domain.CreateUserRequest
 import com.sivalabs.devzone.users.domain.UserDTO
 import com.sivalabs.devzone.users.domain.UserService
+import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 class UserController(
     private val userService: UserService,
 ) {
-    companion object {
-        private val log = logger()
-    }
+    private val log = KotlinLogging.logger {}
 
     @GetMapping("/{id}")
     fun getUser(

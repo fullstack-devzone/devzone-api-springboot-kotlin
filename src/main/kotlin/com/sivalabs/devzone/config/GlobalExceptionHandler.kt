@@ -4,7 +4,7 @@ import com.sivalabs.devzone.common.exceptions.BadRequestException
 import com.sivalabs.devzone.common.exceptions.DevZoneException
 import com.sivalabs.devzone.common.exceptions.ResourceNotFoundException
 import com.sivalabs.devzone.common.exceptions.UnauthorisedAccessException
-import com.sivalabs.devzone.common.logging.logger
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -14,9 +14,7 @@ import java.net.URI
 
 @RestControllerAdvice
 class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
-    companion object {
-        private val log = logger()
-    }
+    private val log = KotlinLogging.logger {}
 
     @ExceptionHandler(ResourceNotFoundException::class)
     fun handleResourceNotFoundException(e: ResourceNotFoundException): ProblemDetail {
@@ -28,7 +26,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(DevZoneException::class)
     fun handleDevZoneException(e: DevZoneException): ProblemDetail {
-        log.error(e.localizedMessage, e)
+        log.error(e) { e.localizedMessage }
         val problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.message!!)
         problemDetail.title = "Unknown Problem"
         problemDetail.type = URI.create("https://api.devzone.com/errors/unknown")
@@ -37,7 +35,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(BadRequestException::class)
     fun handleBadRequestException(e: BadRequestException): ProblemDetail {
-        log.error(e.localizedMessage, e)
+        log.error(e) { e.localizedMessage }
         val problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.message!!)
         problemDetail.title = "Unknown Problem"
         problemDetail.type = URI.create("https://api.devzone.com/errors/badrequest")
@@ -46,7 +44,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(UnauthorisedAccessException::class)
     fun handleUnauthorisedAccessException(e: UnauthorisedAccessException): ProblemDetail {
-        log.error(e.localizedMessage, e)
+        log.error(e) { e.localizedMessage }
         val problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, e.message!!)
         problemDetail.title = "Forbidden"
         problemDetail.type = URI.create("https://api.devzone.com/errors/forbidden")

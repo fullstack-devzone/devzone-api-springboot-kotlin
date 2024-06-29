@@ -1,8 +1,8 @@
 package com.sivalabs.devzone.posts.domain
 
-import com.sivalabs.devzone.common.logging.logger
 import com.sivalabs.devzone.common.models.PagedResult
 import com.sivalabs.devzone.users.domain.UserRepository
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -17,8 +17,9 @@ class PostService(
     private val postRepository: PostRepository,
     private val userRepository: UserRepository,
 ) {
+    private val log = KotlinLogging.logger {}
+
     companion object {
-        private val log = logger()
         const val PAGE_SIZE = 10
     }
 
@@ -66,7 +67,7 @@ class PostService(
 
     @Transactional(readOnly = true)
     fun getPostById(id: Long): Optional<PostDTO> {
-        log.debug("get post by id={}", id)
+        log.debug { "get post by id=$id" }
         return postRepository.findById(id).map(PostDTO::from)
     }
 
@@ -76,18 +77,18 @@ class PostService(
         post.title = createPostRequest.title
         post.content = createPostRequest.content
         post.createdBy = userRepository.getReferenceById(createPostRequest.userId)
-        log.debug("create post with url={}", post.url)
+        log.debug { "create post with url=${post.url}" }
         val savedPost = postRepository.save(post)
         return PostDTO.from(savedPost)
     }
 
     fun deletePost(id: Long) {
-        log.debug("delete post by id={}", id)
+        log.debug { "delete post by id=$id" }
         postRepository.deleteById(id)
     }
 
     fun deleteAllPosts() {
-        log.debug("delete all posts")
+        log.debug { "delete all posts" }
         postRepository.deleteAllInBatch()
     }
 }
