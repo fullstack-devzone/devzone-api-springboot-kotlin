@@ -23,7 +23,7 @@ class PostImportService(
     }
 
     fun importPosts(fileName: String) {
-        log.info("Importing posts from file: {}", fileName)
+        log.info { "Importing posts from file: $fileName" }
         var count = 0L
 
         val file = ClassPathResource(fileName, this.javaClass)
@@ -46,6 +46,6 @@ class PostImportService(
             count++
         }
 
-        log.info("Imported {} posts from file {}", count, fileName)
+        log.info { "Imported $count posts from file $fileName" }
     }
 }

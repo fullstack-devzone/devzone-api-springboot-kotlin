@@ -39,10 +39,10 @@ class PostController(
         @RequestParam(name = "page", defaultValue = "1") page: Int,
     ): PagedResult<PostDTO> {
         return if (StringUtils.isNotEmpty(query)) {
-            log.info("Searching posts for {} with page: {}", query, page)
+            log.info { "Searching posts for $query with page: $page" }
             postService.searchPosts(query, page)
         } else {
-            log.info("Fetching posts with page: {}", page)
+            log.info { "Fetching posts with page: $page" }
             postService.getAllPosts(page)
         }
     }
