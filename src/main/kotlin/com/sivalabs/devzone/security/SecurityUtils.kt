@@ -21,11 +21,11 @@ class SecurityUtils(private val userService: UserService) {
         } else if (authentication is UsernamePasswordAuthenticationToken) {
             if (authentication.principal is UserDetails) {
                 val userDetails: UserDetails = authentication.principal as UserDetails
-                return userService.getUserByEmail(userDetails.username).orElse(null)
+                return userService.getUserByEmail(userDetails.username)
             }
             if (authentication.principal is String) {
                 val username = authentication.principal as String
-                return userService.getUserByEmail(username).orElse(null)
+                return userService.getUserByEmail(username)
             }
         }
         return null

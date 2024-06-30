@@ -4,33 +4,31 @@ import com.sivalabs.devzone.common.exceptions.BadRequestException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.Optional
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 class UserService(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
 ) {
-    @Transactional(readOnly = true)
-    fun getUserById(id: Long): Optional<UserDTO?> {
-        return userRepository.findById(id).map(UserDTO::fromEntity)
+    fun getUserById(id: Long): UserDTO? {
+        return userRepository.findById(id)
     }
 
-    @Transactional(readOnly = true)
-    fun getUserByEmail(email: String): Optional<User> {
+    fun getUserByEmail(email: String): User? {
         return userRepository.findByEmail(email)
     }
 
-    fun createUser(createUserRequest: CreateUserRequest): UserDTO {
-        if (userRepository.existsByEmail(createUserRequest.email)) {
-            throw BadRequestException("Email " + createUserRequest.email + " is already in use")
+    @Transactional
+    fun createUser(request: CreateUserRequest): UserDTO {
+        if (userRepository.existsByEmail(request.email)) {
+            throw BadRequestException("Email " + request.email + " is already in use")
         }
         val user = User()
-        user.name = createUserRequest.name
-        user.email = createUserRequest.email
-        user.password = passwordEncoder.encode(createUserRequest.password)
+        user.name = request.name
+        user.email = request.email
+        user.password = passwordEncoder.encode(request.password)
         user.role = RoleEnum.ROLE_USER
-        return UserDTO.fromEntity(userRepository.save(user))
+        return userRepository.save(user)
     }
 }

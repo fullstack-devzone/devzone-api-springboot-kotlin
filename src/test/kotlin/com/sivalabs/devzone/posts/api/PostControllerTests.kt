@@ -62,7 +62,7 @@ class PostControllerTests : BaseIT() {
     }
 
     @ParameterizedTest
-    @CsvSource("spring,1,9,1,1,true,true,false,false")
+    @CsvSource("spring,1,25,3,1,true,false,true,false")
     fun `should search Posts by keyword`(
         query: String?,
         pageNo: Int,
@@ -129,16 +129,16 @@ class PostControllerTests : BaseIT() {
 
     @Test
     fun `should get Post by Id successfully`() {
-        val user = userService.getUserByEmail(NORMAL_USER_EMAIL).orElseThrow()
+        val user = userService.getUserByEmail(NORMAL_USER_EMAIL)!!
         val request = CreatePostRequest("Sample title", "https://sivalabs.in", "Sample content", user.id!!)
-        val post = postService.createPost(request)
-        given().contentType("application/json").get("/api/posts/{id}", post.id)
+        val postId = postService.createPost(request)
+        given().contentType("application/json").get("/api/posts/{id}", postId)
             .then()
             .statusCode(200)
-            .body("id", CoreMatchers.equalTo(post.id!!.toInt()))
-            .body("title", CoreMatchers.equalTo(post.title))
-            .body("url", CoreMatchers.equalTo(post.url))
-            .body("createdBy.id", CoreMatchers.equalTo(user.id!!.toInt()))
+            .body("id", CoreMatchers.equalTo(postId.toInt()))
+            .body("title", CoreMatchers.equalTo(request.title))
+            .body("url", CoreMatchers.equalTo(request.url))
+            .body("createdBy.id", CoreMatchers.equalTo(user.id?.toInt()))
     }
 
     @Test
@@ -150,13 +150,13 @@ class PostControllerTests : BaseIT() {
 
     @Test
     fun `should be able to delete own Posts`() {
-        val user = userService.getUserByEmail(NORMAL_USER_EMAIL).orElseThrow()
+        val user = userService.getUserByEmail(NORMAL_USER_EMAIL)!!
         val jwtToken = tokenHelper.generateToken(NORMAL_USER_EMAIL)
         val request = CreatePostRequest("Sample title", "https://sivalabs.in", "Sample content", user.id!!)
-        val post = postService.createPost(request)
+        val postId = postService.createPost(request)
         given().contentType("application/json")
             .header(properties.jwt.header, "Bearer $jwtToken")
-            .delete("/api/posts/{id}", post.id)
+            .delete("/api/posts/{id}", postId)
             .then()
             .statusCode(200)
     }
@@ -173,26 +173,26 @@ class PostControllerTests : BaseIT() {
 
     @Test
     fun `Admin should be able to delete Post created by other users`() {
-        val user = userService.getUserByEmail(NORMAL_USER_EMAIL).orElseThrow()
+        val user = userService.getUserByEmail(NORMAL_USER_EMAIL)!!
         val jwtToken = tokenHelper.generateToken(ADMIN_EMAIL)
         val request = CreatePostRequest("Sample title", "https://sivalabs.in", "Sample content", user.id!!)
-        val post = postService.createPost(request)
+        val postId = postService.createPost(request)
         given().contentType("application/json")
             .header(properties.jwt.header, "Bearer $jwtToken")
-            .delete("/api/posts/{id}", post.id)
+            .delete("/api/posts/{id}", postId)
             .then()
             .statusCode(200)
     }
 
     @Test
     fun `Normal user should not be able to delete Post created by other users`() {
-        val user = userService.getUserByEmail(ADMIN_EMAIL).orElseThrow()
+        val user = userService.getUserByEmail(ADMIN_EMAIL)!!
         val jwtToken = tokenHelper.generateToken(NORMAL_USER_EMAIL)
         val request = CreatePostRequest("Sample title", "https://sivalabs.in", "Sample content", user.id!!)
-        val post = postService.createPost(request)
+        val postId = postService.createPost(request)
         given().contentType("application/json")
             .header(properties.jwt.header, "Bearer $jwtToken")
-            .delete("/api/posts/{id}", post.id)
+            .delete("/api/posts/{id}", postId)
             .then()
             .statusCode(403)
     }

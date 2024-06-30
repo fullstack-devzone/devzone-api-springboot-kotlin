@@ -51,9 +51,7 @@ class PostController(
     fun getPost(
         @PathVariable id: Long,
     ): PostDTO? {
-        return postService
-            .getPostById(id)
-            .orElseThrow { ResourceNotFoundException("Post with id: $id not found") }
+        return postService.getPostById(id) ?: throw ResourceNotFoundException("Post with id: $id not found")
     }
 
     @PostMapping
@@ -70,7 +68,8 @@ class PostController(
                 createPostRequest.content,
                 loginUser.id!!,
             )
-        return postService.createPost(request)
+        val id = postService.createPost(request)
+        return postService.getPostById(id)
     }
 
     @DeleteMapping("/{id}")
@@ -79,12 +78,7 @@ class PostController(
         @PathVariable id: Long,
     ): ResponseEntity<Void> {
         val loginUser = securityUtils.loginUser()!!
-        val post =
-            postService.getPostById(id).orElseThrow {
-                ResourceNotFoundException(
-                    "Post not found",
-                )
-            }
+        val post = postService.getPostById(id) ?: throw ResourceNotFoundException("Post with id: $id not found")
         checkPrivilege(post, loginUser)
         postService.deletePost(id)
         return ResponseEntity.ok().build()

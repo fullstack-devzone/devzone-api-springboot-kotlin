@@ -1,20 +1,15 @@
 package com.sivalabs.devzone.posts.domain
 
 import com.sivalabs.devzone.common.models.PagedResult
-import com.sivalabs.devzone.users.domain.UserRepository
 import io.github.oshai.kotlinlogging.KotlinLogging
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.Optional
+import java.time.LocalDateTime
 
 @Service
 @Transactional
 class PostService(
     private val postRepository: PostRepository,
-    private val userRepository: UserRepository,
 ) {
     private val log = KotlinLogging.logger {}
 
@@ -24,20 +19,7 @@ class PostService(
 
     @Transactional(readOnly = true)
     fun getAllPosts(page: Int): PagedResult<PostDTO> {
-        val pageable: Pageable =
-            PageRequest.of(
-                if (page < 1) 0 else page - 1,
-                PAGE_SIZE,
-                Sort.Direction.DESC,
-                "createdAt",
-            )
-        val pageOfPosts = postRepository.findAllBy(pageable).map(PostDTO::from)
-        return PagedResult(
-            pageOfPosts.content,
-            pageOfPosts.totalElements,
-            pageOfPosts.number + 1,
-            pageOfPosts.totalPages,
-        )
+        return postRepository.findBy(page, PAGE_SIZE)
     }
 
     @Transactional(readOnly = true)
@@ -45,37 +27,28 @@ class PostService(
         query: String,
         page: Int,
     ): PagedResult<PostDTO> {
-        val pageable: Pageable =
-            PageRequest.of(
-                if (page < 1) 0 else page - 1,
-                PAGE_SIZE,
-                Sort.Direction.DESC,
-                "createdAt",
-            )
-        val pageOfPosts = postRepository.findByTitleContainingIgnoreCase(query, pageable).map(PostDTO::from)
-        return PagedResult(
-            pageOfPosts.content,
-            pageOfPosts.totalElements,
-            pageOfPosts.number + 1,
-            pageOfPosts.totalPages,
-        )
+        return postRepository.search(query, page, PAGE_SIZE)
     }
 
     @Transactional(readOnly = true)
-    fun getPostById(id: Long): Optional<PostDTO> {
+    fun getPostById(id: Long): PostDTO? {
         log.debug { "get post by id=$id" }
-        return postRepository.findById(id).map(PostDTO::from)
+        return postRepository.findById(id)
     }
 
-    fun createPost(createPostRequest: CreatePostRequest): PostDTO {
-        val post = Post()
-        post.url = createPostRequest.url
-        post.title = createPostRequest.title
-        post.content = createPostRequest.content
-        post.createdBy = userRepository.getReferenceById(createPostRequest.userId)
-        log.debug { "create post with url=${post.url}" }
-        val savedPost = postRepository.save(post)
-        return PostDTO.from(savedPost)
+    fun createPost(request: CreatePostRequest): Long {
+        log.debug { "create post with url=${request.url}" }
+        val post =
+            Post(
+                null,
+                request.url,
+                request.title,
+                request.content,
+                request.userId,
+                LocalDateTime.now(),
+                null,
+            )
+        return postRepository.save(post)
     }
 
     fun deletePost(id: Long) {

@@ -1,39 +1,18 @@
 package com.sivalabs.devzone.posts.domain
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import jakarta.validation.constraints.NotBlank
 import java.time.LocalDateTime
 
-class PostDTO {
-    var id: Long? = null
-
-    @NotBlank(message = "URL cannot be blank")
-    var url: String? = null
-    var title: String? = null
-    var content: String? = null
-
-    var createdBy: PostCreator? = null
-
+data class PostDTO(
+    var id: Long? = null,
+    var url: String = "",
+    var title: String = "",
+    var content: String = "",
+    var createdBy: PostCreator? = null,
     @JsonProperty("created_at")
-    var createdAt: LocalDateTime? = null
-
+    var createdAt: LocalDateTime = LocalDateTime.now(),
     @JsonProperty("updated_at")
-    var updatedAt: LocalDateTime? = null
+    var updatedAt: LocalDateTime? = null,
+)
 
-    companion object {
-        fun from(post: Post): PostDTO {
-            val dto = PostDTO()
-            dto.id = post.id
-            dto.url = post.url
-            dto.title = post.title
-            dto.content = post.content
-            dto.createdBy = PostCreator(post.createdBy!!.id, post.createdBy!!.name)
-
-            dto.createdAt = post.createdAt
-            dto.updatedAt = post.updatedAt
-            return dto
-        }
-    }
-
-    class PostCreator(var id: Long?, var name: String?)
-}
+data class PostCreator(var id: Long, var name: String)

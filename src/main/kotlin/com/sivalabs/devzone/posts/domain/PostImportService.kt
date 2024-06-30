@@ -32,7 +32,7 @@ class PostImportService(
         csvReader.skip(1)
         val iterator = CSVIterator(csvReader)
 
-        val user = userService.getUserByEmail(SYSTEM_USER_EMAIL).orElseThrow()
+        val user = userService.getUserByEmail(SYSTEM_USER_EMAIL) ?: throw IllegalArgumentException()
         while (iterator.hasNext()) {
             val nextLine = iterator.next()
             val request =

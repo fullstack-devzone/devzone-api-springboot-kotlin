@@ -10,13 +10,8 @@ import org.springframework.stereotype.Service
 @Service("userDetailsService")
 class SecurityUserDetailsService(private val userService: UserService) : UserDetailsService {
     override fun loadUserByUsername(username: String): UserDetails? {
-        return userService
-            .getUserByEmail(username)
-            .map { user: User -> SecurityUser(user) }
-            .orElseThrow {
-                UsernameNotFoundException(
-                    "No user found with username $username",
-                )
-            }
+        return userService.getUserByEmail(username)
+            ?.let { user: User -> SecurityUser(user) }
+            ?: throw UsernameNotFoundException("No user found with username $username")
     }
 }

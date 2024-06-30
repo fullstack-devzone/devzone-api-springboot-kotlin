@@ -26,19 +26,19 @@ class UserController(
     fun getUser(
         @PathVariable id: Long,
     ): ResponseEntity<UserDTO> {
-        log.info("process=get_user, user_id={}", id)
+        log.info { "process=get_user, user_id=$id" }
         return userService
             .getUserById(id)
-            .map { body: UserDTO? -> ResponseEntity.ok(body) }
-            .orElse(ResponseEntity.notFound().build())
+            ?.let { userDTO -> ResponseEntity.ok(userDTO) }
+            ?: ResponseEntity.notFound().build()
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createUser(
-        @RequestBody @Valid createUserRequest: CreateUserRequest,
+        @RequestBody @Valid request: CreateUserRequest,
     ): UserDTO {
-        log.info("process=create_user, user_email={}", createUserRequest.email)
-        return userService.createUser(createUserRequest)
+        log.info { "process=create_user, user_email=${request.email}" }
+        return userService.createUser(request)
     }
 }
