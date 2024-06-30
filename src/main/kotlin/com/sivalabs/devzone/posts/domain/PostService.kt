@@ -3,7 +3,6 @@ package com.sivalabs.devzone.posts.domain
 import com.sivalabs.devzone.common.models.PagedResult
 import com.sivalabs.devzone.users.domain.UserRepository
 import io.github.oshai.kotlinlogging.KotlinLogging
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -32,7 +31,7 @@ class PostService(
                 Sort.Direction.DESC,
                 "createdAt",
             )
-        val pageOfPosts = postRepository.findAll(pageable).map(PostDTO::from)
+        val pageOfPosts = postRepository.findAllBy(pageable).map(PostDTO::from)
         return PagedResult(
             pageOfPosts.content,
             pageOfPosts.totalElements,
@@ -53,10 +52,7 @@ class PostService(
                 Sort.Direction.DESC,
                 "createdAt",
             )
-        val pageOfPosts: Page<PostDTO> =
-            postRepository
-                .findByTitleContainingIgnoreCase(query, pageable)
-                .map(PostDTO::from)
+        val pageOfPosts = postRepository.findByTitleContainingIgnoreCase(query, pageable).map(PostDTO::from)
         return PagedResult(
             pageOfPosts.content,
             pageOfPosts.totalElements,

@@ -1,11 +1,10 @@
 package com.sivalabs.devzone
 
-import com.sivalabs.devzone.common.TestcontainersConfig
-import org.springframework.boot.SpringApplication
-import com.sivalabs.devzone.main as applicationMain
+import org.springframework.boot.fromApplication
+import org.springframework.boot.with
 
 fun main(args: Array<String>) {
-    SpringApplication.from(::applicationMain)
-        .with(TestcontainersConfig::class.java)
+    fromApplication<Application>()
+        .with(TestcontainersConfig::class)
         .run(*args)
 }

@@ -1,6 +1,6 @@
 package com.sivalabs.devzone.users.api
 
-import com.sivalabs.devzone.common.BaseIT
+import com.sivalabs.devzone.BaseIT
 import com.sivalabs.devzone.users.domain.CreateUserRequest
 import com.sivalabs.devzone.users.domain.LoginRequest
 import com.sivalabs.devzone.users.domain.UserService

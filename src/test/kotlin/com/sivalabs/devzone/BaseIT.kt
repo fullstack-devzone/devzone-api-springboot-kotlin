@@ -1,7 +1,6 @@
-package com.sivalabs.devzone.common
+package com.sivalabs.devzone
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.sivalabs.devzone.ApplicationProperties
 import io.restassured.RestAssured
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired

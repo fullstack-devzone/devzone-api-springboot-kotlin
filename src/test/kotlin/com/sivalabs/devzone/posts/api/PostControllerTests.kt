@@ -1,8 +1,8 @@
 package com.sivalabs.devzone.posts.api
 
-import com.sivalabs.devzone.common.BaseIT
-import com.sivalabs.devzone.common.TestConstants.ADMIN_EMAIL
-import com.sivalabs.devzone.common.TestConstants.NORMAL_USER_EMAIL
+import com.sivalabs.devzone.BaseIT
+import com.sivalabs.devzone.TestConstants.ADMIN_EMAIL
+import com.sivalabs.devzone.TestConstants.NORMAL_USER_EMAIL
 import com.sivalabs.devzone.posts.domain.CreatePostRequest
 import com.sivalabs.devzone.posts.domain.PostImportService
 import com.sivalabs.devzone.posts.domain.PostService

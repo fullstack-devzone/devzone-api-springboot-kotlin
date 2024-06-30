@@ -1,7 +1,7 @@
 package com.sivalabs.devzone.users.api
 
-import com.sivalabs.devzone.common.BaseIT
-import com.sivalabs.devzone.common.TestConstants.ADMIN_EMAIL
+import com.sivalabs.devzone.BaseIT
+import com.sivalabs.devzone.TestConstants.ADMIN_EMAIL
 import com.sivalabs.devzone.users.domain.CreateUserRequest
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType

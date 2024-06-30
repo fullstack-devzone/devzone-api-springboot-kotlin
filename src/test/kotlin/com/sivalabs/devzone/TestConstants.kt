@@ -1,4 +1,4 @@
-package com.sivalabs.devzone.common
+package com.sivalabs.devzone
 
 object TestConstants {
     const val ADMIN_EMAIL = "admin@gmail.com"
