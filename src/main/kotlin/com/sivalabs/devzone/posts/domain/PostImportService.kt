@@ -36,11 +36,11 @@ class PostImportService(
         while (iterator.hasNext()) {
             val nextLine = iterator.next()
             val request =
-                CreatePostRequest(
-                    nextLine[1],
+                CreatePostCmd(
                     nextLine[0],
                     nextLine[1],
-                    user.id!!,
+                    nextLine[1],
+                    user.id,
                 )
             postService.createPost(request)
             count++

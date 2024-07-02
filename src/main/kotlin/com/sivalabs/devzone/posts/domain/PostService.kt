@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 class PostService(
     private val postRepository: PostRepository,
 ) {
@@ -17,12 +17,10 @@ class PostService(
         const val PAGE_SIZE = 10
     }
 
-    @Transactional(readOnly = true)
     fun getAllPosts(page: Int): PagedResult<PostDTO> {
         return postRepository.findBy(page, PAGE_SIZE)
     }
 
-    @Transactional(readOnly = true)
     fun searchPosts(
         query: String,
         page: Int,
@@ -30,13 +28,13 @@ class PostService(
         return postRepository.search(query, page, PAGE_SIZE)
     }
 
-    @Transactional(readOnly = true)
     fun getPostById(id: Long): PostDTO? {
         log.debug { "get post by id=$id" }
         return postRepository.findById(id)
     }
 
-    fun createPost(request: CreatePostRequest): Long {
+    @Transactional
+    fun createPost(request: CreatePostCmd): Long {
         log.debug { "create post with url=${request.url}" }
         val post =
             Post(
@@ -51,13 +49,15 @@ class PostService(
         return postRepository.save(post)
     }
 
+    @Transactional
     fun deletePost(id: Long) {
         log.debug { "delete post by id=$id" }
         postRepository.deleteById(id)
     }
 
+    @Transactional
     fun deleteAllPosts() {
         log.debug { "delete all posts" }
-        postRepository.deleteAllInBatch()
+        postRepository.deleteAll()
     }
 }

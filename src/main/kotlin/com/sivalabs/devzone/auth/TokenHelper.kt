@@ -1,4 +1,4 @@
-package com.sivalabs.devzone.security
+package com.sivalabs.devzone.auth
 
 import com.sivalabs.devzone.ApplicationProperties
 import com.sivalabs.devzone.common.exceptions.DevZoneException
@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets
 import java.util.Date
 
 @Component
-class TokenHelper(private val applicationProperties: ApplicationProperties) {
+class TokenHelper(private val properties: ApplicationProperties) {
     private val log = KotlinLogging.logger {}
 
     fun getUsernameFromToken(token: String): String? {
@@ -21,17 +21,17 @@ class TokenHelper(private val applicationProperties: ApplicationProperties) {
             val claims: Claims = getAllClaimsFromToken(token)
             return claims.subject
         } catch (e: Exception) {
-            log.error(e.message, e)
+            log.error(e) { "${e.message}" }
             return null
         }
     }
 
     fun generateToken(username: String): String {
-        val secretString = applicationProperties.jwt.secret
+        val secretString = properties.jwt.secret
         val key = Keys.hmacShaKeyFor(secretString.toByteArray(StandardCharsets.UTF_8))
 
         return Jwts.builder()
-            .issuer(applicationProperties.jwt.issuer)
+            .issuer(properties.jwt.issuer)
             .subject(username)
             .issuedAt(Date())
             .expiration(generateExpirationDate())
@@ -40,7 +40,7 @@ class TokenHelper(private val applicationProperties: ApplicationProperties) {
     }
 
     private fun getAllClaimsFromToken(token: String): Claims {
-        val secretString = applicationProperties.jwt.secret
+        val secretString = properties.jwt.secret
         val key = Keys.hmacShaKeyFor(secretString.toByteArray(StandardCharsets.UTF_8))
 
         val claims: Claims =
@@ -57,7 +57,7 @@ class TokenHelper(private val applicationProperties: ApplicationProperties) {
     }
 
     private fun generateExpirationDate(): Date {
-        return Date(System.currentTimeMillis() + applicationProperties.jwt.expiresIn * 1000)
+        return Date(System.currentTimeMillis() + properties.jwt.expiresIn * 1000)
     }
 
     fun validateToken(
@@ -69,15 +69,11 @@ class TokenHelper(private val applicationProperties: ApplicationProperties) {
     }
 
     fun getToken(request: HttpServletRequest): String? {
-        val authHeader = getAuthHeaderFromHeader(request)
+        val authHeader = request.getHeader(properties.jwt.header)
         return if (authHeader != null && authHeader.startsWith("Bearer ")) {
             authHeader.substring(7)
         } else {
             null
         }
-    }
-
-    fun getAuthHeaderFromHeader(request: HttpServletRequest): String? {
-        return request.getHeader(applicationProperties.jwt.header)
     }
 }

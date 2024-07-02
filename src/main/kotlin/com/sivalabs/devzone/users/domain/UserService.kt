@@ -15,12 +15,12 @@ class UserService(
         return userRepository.findById(id)
     }
 
-    fun getUserByEmail(email: String): User? {
+    fun getUserByEmail(email: String): UserDetailsDTO? {
         return userRepository.findByEmail(email)
     }
 
     @Transactional
-    fun createUser(request: CreateUserRequest): UserDTO {
+    fun createUser(request: CreateUserCmd): UserDTO {
         if (userRepository.existsByEmail(request.email)) {
             throw BadRequestException("Email " + request.email + " is already in use")
         }

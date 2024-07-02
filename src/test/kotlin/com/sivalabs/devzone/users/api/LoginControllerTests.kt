@@ -1,7 +1,7 @@
 package com.sivalabs.devzone.users.api
 
 import com.sivalabs.devzone.BaseIT
-import com.sivalabs.devzone.users.domain.CreateUserRequest
+import com.sivalabs.devzone.users.domain.CreateUserCmd
 import com.sivalabs.devzone.users.domain.LoginRequest
 import com.sivalabs.devzone.users.domain.UserService
 import io.restassured.RestAssured.given
@@ -17,7 +17,7 @@ class LoginControllerTests : BaseIT() {
     @Test
     fun `should login successfully with valid credentials`() {
         val uuid = UUID.randomUUID().toString()
-        val request = CreateUserRequest(uuid, "$uuid@gmail.com", uuid)
+        val request = CreateUserCmd(uuid, "$uuid@gmail.com", uuid)
         val userDTO = userService.createUser(request)
         val loginRequest = LoginRequest(userDTO.email, request.password)
         given().contentType(ContentType.JSON)

@@ -1,10 +1,9 @@
-package com.sivalabs.devzone.security
+package com.sivalabs.devzone.auth
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Component
@@ -29,13 +28,12 @@ class TokenAuthFilter(
                 if (username != null) {
                     val userDetails = userDetailsService.loadUserByUsername(username)
                     if (tokenHelper.validateToken(authToken, userDetails)) {
-                        val authentication =
-                            UsernamePasswordAuthenticationToken(userDetails.username, userDetails.password, userDetails.authorities)
+                        val authentication = TokenBasedAuthentication(authToken, userDetails)
                         SecurityContextHolder.getContext().authentication = authentication
                     }
                 }
             } catch (e: RuntimeException) {
-                log.error("Error processing access_token", e)
+                log.error(e) { "Error processing access_token" }
             }
         }
         chain.doFilter(request, response)

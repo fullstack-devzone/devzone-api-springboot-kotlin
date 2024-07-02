@@ -10,15 +10,15 @@ import kotlin.jvm.optionals.getOrNull
 @Repository
 class UserRepository(private val jdbcClient: JdbcClient) {
     fun findById(userId: Long): UserDTO? {
-        return jdbcClient.sql("select id, name, email, password, role from users where id = :id")
+        return jdbcClient.sql("select id, name, email, role from users where id = :id")
             .param("id", userId)
             .query(UserDTO::class.java).optional().getOrNull()
     }
 
-    fun findByEmail(email: String): User? {
+    fun findByEmail(email: String): UserDetailsDTO? {
         return jdbcClient.sql("select id, name, email, password, role from users where email = :email")
             .param("email", email)
-            .query(User::class.java).optional().getOrNull()
+            .query(UserDetailsDTO::class.java).optional().getOrNull()
     }
 
     fun existsByEmail(email: String): Boolean {

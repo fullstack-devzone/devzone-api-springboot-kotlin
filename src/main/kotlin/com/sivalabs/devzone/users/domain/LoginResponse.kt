@@ -9,5 +9,5 @@ data class LoginResponse(
     @JsonProperty("expires_at")
     val expiresAt: LocalDateTime,
     @JsonProperty("user")
-    val user: AuthUserDTO,
+    val user: UserDTO,
 )

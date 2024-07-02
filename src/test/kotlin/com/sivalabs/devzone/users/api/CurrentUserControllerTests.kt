@@ -2,7 +2,7 @@ package com.sivalabs.devzone.users.api
 
 import com.sivalabs.devzone.BaseIT
 import com.sivalabs.devzone.TestConstants.ADMIN_EMAIL
-import com.sivalabs.devzone.security.TokenHelper
+import com.sivalabs.devzone.auth.TokenHelper
 import io.restassured.RestAssured.given
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

@@ -3,10 +3,10 @@ package com.sivalabs.devzone.posts.api
 import com.sivalabs.devzone.BaseIT
 import com.sivalabs.devzone.TestConstants.ADMIN_EMAIL
 import com.sivalabs.devzone.TestConstants.NORMAL_USER_EMAIL
-import com.sivalabs.devzone.posts.domain.CreatePostRequest
+import com.sivalabs.devzone.auth.TokenHelper
+import com.sivalabs.devzone.posts.domain.CreatePostCmd
 import com.sivalabs.devzone.posts.domain.PostImportService
 import com.sivalabs.devzone.posts.domain.PostService
-import com.sivalabs.devzone.security.TokenHelper
 import com.sivalabs.devzone.users.domain.UserService
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
@@ -130,7 +130,7 @@ class PostControllerTests : BaseIT() {
     @Test
     fun `should get Post by Id successfully`() {
         val user = userService.getUserByEmail(NORMAL_USER_EMAIL)!!
-        val request = CreatePostRequest("Sample title", "https://sivalabs.in", "Sample content", user.id!!)
+        val request = CreatePostCmd("https://sivalabs.in", "Sample title", "Sample content", user.id!!)
         val postId = postService.createPost(request)
         given().contentType("application/json").get("/api/posts/{id}", postId)
             .then()
@@ -138,7 +138,8 @@ class PostControllerTests : BaseIT() {
             .body("id", CoreMatchers.equalTo(postId.toInt()))
             .body("title", CoreMatchers.equalTo(request.title))
             .body("url", CoreMatchers.equalTo(request.url))
-            .body("createdBy.id", CoreMatchers.equalTo(user.id?.toInt()))
+            .body("createdBy.id", CoreMatchers.equalTo(user.id.toInt()))
+            .body("createdBy.name", CoreMatchers.equalTo(user.name))
     }
 
     @Test
@@ -152,7 +153,7 @@ class PostControllerTests : BaseIT() {
     fun `should be able to delete own Posts`() {
         val user = userService.getUserByEmail(NORMAL_USER_EMAIL)!!
         val jwtToken = tokenHelper.generateToken(NORMAL_USER_EMAIL)
-        val request = CreatePostRequest("Sample title", "https://sivalabs.in", "Sample content", user.id!!)
+        val request = CreatePostCmd("https://sivalabs.in", "Sample title", "Sample content", user.id!!)
         val postId = postService.createPost(request)
         given().contentType("application/json")
             .header(properties.jwt.header, "Bearer $jwtToken")
@@ -175,7 +176,7 @@ class PostControllerTests : BaseIT() {
     fun `Admin should be able to delete Post created by other users`() {
         val user = userService.getUserByEmail(NORMAL_USER_EMAIL)!!
         val jwtToken = tokenHelper.generateToken(ADMIN_EMAIL)
-        val request = CreatePostRequest("Sample title", "https://sivalabs.in", "Sample content", user.id!!)
+        val request = CreatePostCmd("https://sivalabs.in", "Sample title", "Sample content", user.id!!)
         val postId = postService.createPost(request)
         given().contentType("application/json")
             .header(properties.jwt.header, "Bearer $jwtToken")
@@ -188,7 +189,7 @@ class PostControllerTests : BaseIT() {
     fun `Normal user should not be able to delete Post created by other users`() {
         val user = userService.getUserByEmail(ADMIN_EMAIL)!!
         val jwtToken = tokenHelper.generateToken(NORMAL_USER_EMAIL)
-        val request = CreatePostRequest("Sample title", "https://sivalabs.in", "Sample content", user.id!!)
+        val request = CreatePostCmd("https://sivalabs.in", "Sample title", "Sample content", user.id!!)
         val postId = postService.createPost(request)
         given().contentType("application/json")
             .header(properties.jwt.header, "Bearer $jwtToken")

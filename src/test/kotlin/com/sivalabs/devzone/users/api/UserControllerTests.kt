@@ -2,7 +2,7 @@ package com.sivalabs.devzone.users.api
 
 import com.sivalabs.devzone.BaseIT
 import com.sivalabs.devzone.TestConstants.ADMIN_EMAIL
-import com.sivalabs.devzone.users.domain.CreateUserRequest
+import com.sivalabs.devzone.users.domain.CreateUserCmd
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
 import org.instancio.Instancio
@@ -18,7 +18,7 @@ class UserControllerTests : BaseIT() {
 
     @Test
     fun `should create new user with valid data`() {
-        val request = Instancio.of(CreateUserRequest::class.java).create()
+        val request = Instancio.of(CreateUserCmd::class.java).create()
         given().contentType(ContentType.JSON)
             .body(request)
             .post("/api/users")
@@ -28,7 +28,7 @@ class UserControllerTests : BaseIT() {
 
     @Test
     fun `should fail to create new user with existing email`() {
-        val request = CreateUserRequest("myname", ADMIN_EMAIL, "secret")
+        val request = CreateUserCmd("myname", ADMIN_EMAIL, "secret")
         given().contentType(ContentType.JSON)
             .body(request)
             .post("/api/users")

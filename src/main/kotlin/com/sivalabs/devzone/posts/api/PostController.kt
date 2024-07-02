@@ -1,17 +1,18 @@
 package com.sivalabs.devzone.posts.api
 
+import com.sivalabs.devzone.auth.SecurityUser
+import com.sivalabs.devzone.auth.SecurityUtils
 import com.sivalabs.devzone.common.exceptions.ResourceNotFoundException
 import com.sivalabs.devzone.common.exceptions.UnauthorisedAccessException
 import com.sivalabs.devzone.common.models.PagedResult
-import com.sivalabs.devzone.posts.domain.CreatePostRequest
+import com.sivalabs.devzone.posts.domain.CreatePostCmd
 import com.sivalabs.devzone.posts.domain.PostDTO
 import com.sivalabs.devzone.posts.domain.PostService
-import com.sivalabs.devzone.security.SecurityUtils
-import com.sivalabs.devzone.users.domain.User
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
 import org.apache.commons.lang3.StringUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -58,15 +59,15 @@ class PostController(
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create Post", security = [SecurityRequirement(name = "bearerAuth")])
     fun createPost(
-        @RequestBody @Valid createPostRequest: CreatePostRequest,
+        @RequestBody @Valid payload: CreatePostCmdPayload,
     ): PostDTO? {
         val loginUser = securityUtils.loginUser()!!
         val request =
-            CreatePostRequest(
-                createPostRequest.title,
-                createPostRequest.url,
-                createPostRequest.content,
-                loginUser.id!!,
+            CreatePostCmd(
+                payload.url,
+                payload.title,
+                payload.content,
+                loginUser.id,
             )
         val id = postService.createPost(request)
         return postService.getPostById(id)
@@ -86,10 +87,18 @@ class PostController(
 
     private fun checkPrivilege(
         post: PostDTO,
-        loginUser: User,
+        loginUser: SecurityUser,
     ) {
         if (!(post.createdBy?.id == loginUser.id || loginUser.isCurrentUserAdmin())) {
             throw UnauthorisedAccessException("Unauthorised Access")
         }
     }
+
+    data class CreatePostCmdPayload(
+        @field:NotBlank(message = "URL cannot be blank")
+        val url: String,
+        @field:NotBlank(message = "Title cannot be blank")
+        val title: String,
+        val content: String?,
+    )
 }

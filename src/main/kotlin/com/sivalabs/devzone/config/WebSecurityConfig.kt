@@ -1,6 +1,6 @@
 package com.sivalabs.devzone.config
 
-import com.sivalabs.devzone.security.TokenAuthFilter
+import com.sivalabs.devzone.auth.TokenAuthFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod

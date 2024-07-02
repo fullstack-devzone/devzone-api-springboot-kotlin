@@ -1,11 +1,11 @@
-package com.sivalabs.devzone.users.api
+package com.sivalabs.devzone.auth.api
 
 import com.sivalabs.devzone.ApplicationProperties
-import com.sivalabs.devzone.security.SecurityUser
-import com.sivalabs.devzone.security.TokenHelper
-import com.sivalabs.devzone.users.domain.AuthUserDTO
+import com.sivalabs.devzone.auth.SecurityUser
+import com.sivalabs.devzone.auth.TokenHelper
 import com.sivalabs.devzone.users.domain.LoginRequest
 import com.sivalabs.devzone.users.domain.LoginResponse
+import com.sivalabs.devzone.users.domain.UserDTO
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -51,7 +51,13 @@ class LoginController(
         securityUser: SecurityUser,
         token: String,
     ): LoginResponse {
-        val authUserDTO = AuthUserDTO(securityUser.user.name!!, securityUser.user.email!!, securityUser.user.role!!)
+        val authUserDTO =
+            UserDTO(
+                securityUser.id,
+                securityUser.name,
+                securityUser.email,
+                securityUser.role,
+            )
         return LoginResponse(
             token,
             LocalDateTime.now().plusSeconds(applicationProperties.jwt.expiresIn),

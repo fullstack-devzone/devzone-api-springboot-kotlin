@@ -1,6 +1,5 @@
 package com.sivalabs.devzone
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.restassured.RestAssured
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,9 +20,6 @@ abstract class BaseIT {
 
     @Autowired
     protected lateinit var properties: ApplicationProperties
-
-    @Autowired
-    protected lateinit var objectMapper: ObjectMapper
 
     @BeforeEach
     fun setUpBase() {

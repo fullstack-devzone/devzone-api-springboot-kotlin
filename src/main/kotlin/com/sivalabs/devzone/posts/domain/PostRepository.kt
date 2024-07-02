@@ -95,7 +95,7 @@ class PostRepository(private val jdbcClient: JdbcClient) {
         jdbcClient.sql("delete from posts where id = :id").param("id", id)
     }
 
-    fun deleteAllInBatch() {
+    fun deleteAll() {
         jdbcClient.sql("delete from posts").update()
     }
 }

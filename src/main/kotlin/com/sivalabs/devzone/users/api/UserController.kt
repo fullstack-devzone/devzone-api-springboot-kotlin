@@ -1,6 +1,6 @@
 package com.sivalabs.devzone.users.api
 
-import com.sivalabs.devzone.users.domain.CreateUserRequest
+import com.sivalabs.devzone.users.domain.CreateUserCmd
 import com.sivalabs.devzone.users.domain.UserDTO
 import com.sivalabs.devzone.users.domain.UserService
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -36,7 +36,7 @@ class UserController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createUser(
-        @RequestBody @Valid request: CreateUserRequest,
+        @RequestBody @Valid request: CreateUserCmd,
     ): UserDTO {
         log.info { "process=create_user, user_email=${request.email}" }
         return userService.createUser(request)

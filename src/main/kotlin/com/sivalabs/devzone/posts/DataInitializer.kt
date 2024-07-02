@@ -23,7 +23,7 @@ class DataInitializer(
             val fileName = applicationProperties.importFilePath
             postImportService.importPosts(fileName)
         } else {
-            log.info("Data importing is disabled")
+            log.info { "Data importing is disabled" }
         }
     }
 }
