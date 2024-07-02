@@ -57,7 +57,7 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     implementation("com.opencsv:opencsv:5.9")
     implementation("org.apache.commons:commons-lang3")
     implementation("commons-io:commons-io:2.16.1")
