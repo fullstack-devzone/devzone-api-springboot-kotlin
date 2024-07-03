@@ -17,7 +17,7 @@ class PostService(
         const val PAGE_SIZE = 10
     }
 
-    fun getAllPosts(page: Int): PagedResult<PostDTO> {
+    fun getPosts(page: Int): PagedResult<PostDTO> {
         return postRepository.findBy(page, PAGE_SIZE)
     }
 
@@ -29,13 +29,12 @@ class PostService(
     }
 
     fun getPostById(id: Long): PostDTO? {
-        log.debug { "get post by id=$id" }
         return postRepository.findById(id)
     }
 
     @Transactional
     fun createPost(request: CreatePostCmd): Long {
-        log.debug { "create post with url=${request.url}" }
+        log.debug { "Create post with url=${request.url}" }
         val post =
             Post(
                 null,
@@ -51,13 +50,13 @@ class PostService(
 
     @Transactional
     fun deletePost(id: Long) {
-        log.debug { "delete post by id=$id" }
+        log.debug { "Delete post by id=$id" }
         postRepository.deleteById(id)
     }
 
     @Transactional
     fun deleteAllPosts() {
-        log.debug { "delete all posts" }
+        log.debug { "Delete all posts" }
         postRepository.deleteAll()
     }
 }

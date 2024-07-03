@@ -21,9 +21,9 @@ import java.time.LocalDateTime
 @RestController
 @RequestMapping("/api")
 class LoginController(
-    private val authenticationManager: AuthenticationManager,
+    private val authManager: AuthenticationManager,
     private val tokenHelper: TokenHelper,
-    private val applicationProperties: ApplicationProperties,
+    private val properties: ApplicationProperties,
 ) {
     @PostMapping("/login")
     fun login(
@@ -32,7 +32,7 @@ class LoginController(
     ): ResponseEntity<LoginResponse> {
         return try {
             val authentication =
-                authenticationManager.authenticate(
+                authManager.authenticate(
                     UsernamePasswordAuthenticationToken(
                         credentials.username,
                         credentials.password,
@@ -41,17 +41,17 @@ class LoginController(
             SecurityContextHolder.getContext().authentication = authentication
             val user: SecurityUser = authentication.principal as SecurityUser
             val accessToken: String = tokenHelper.generateToken(user.username)
-            ResponseEntity.ok(getAuthenticationResponse(user, accessToken))
+            ResponseEntity.ok(getLoginResponse(user, accessToken))
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         }
     }
 
-    private fun getAuthenticationResponse(
+    private fun getLoginResponse(
         securityUser: SecurityUser,
         token: String,
     ): LoginResponse {
-        val authUserDTO =
+        val userDTO =
             UserDTO(
                 securityUser.id,
                 securityUser.name,
@@ -60,8 +60,8 @@ class LoginController(
             )
         return LoginResponse(
             token,
-            LocalDateTime.now().plusSeconds(applicationProperties.jwt.expiresIn),
-            authUserDTO,
+            LocalDateTime.now().plusSeconds(properties.jwt.expiresIn),
+            userDTO,
         )
     }
 }

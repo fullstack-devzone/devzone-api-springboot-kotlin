@@ -11,13 +11,9 @@ class UserService(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
 ) {
-    fun getUserById(id: Long): UserDTO? {
-        return userRepository.findById(id)
-    }
+    fun getUserById(id: Long) = userRepository.findById(id)
 
-    fun getUserByEmail(email: String): UserDetailsDTO? {
-        return userRepository.findByEmail(email)
-    }
+    fun getUserByEmail(email: String) = userRepository.findByEmail(email)
 
     @Transactional
     fun createUser(request: CreateUserCmd): UserDTO {

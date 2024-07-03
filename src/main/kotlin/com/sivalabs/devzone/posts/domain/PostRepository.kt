@@ -92,7 +92,7 @@ class PostRepository(private val jdbcClient: JdbcClient) {
     }
 
     fun deleteById(id: Long) {
-        jdbcClient.sql("delete from posts where id = :id").param("id", id)
+        jdbcClient.sql("delete from posts where id = :id").param("id", id).update()
     }
 
     fun deleteAll() {

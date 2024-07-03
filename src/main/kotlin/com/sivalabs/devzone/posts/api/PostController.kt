@@ -44,7 +44,7 @@ class PostController(
             postService.searchPosts(query, page)
         } else {
             log.info { "Fetching posts with page: $page" }
-            postService.getAllPosts(page)
+            postService.getPosts(page)
         }
     }
 
@@ -52,6 +52,7 @@ class PostController(
     fun getPost(
         @PathVariable id: Long,
     ): PostDTO? {
+        log.debug { "Get post by id=$id" }
         return postService.getPostById(id) ?: throw ResourceNotFoundException("Post with id: $id not found")
     }
 
@@ -61,7 +62,7 @@ class PostController(
     fun createPost(
         @RequestBody @Valid payload: CreatePostCmdPayload,
     ): PostDTO? {
-        val loginUser = securityUtils.loginUser()!!
+        val loginUser = securityUtils.getRequiredLoginUser()
         val request =
             CreatePostCmd(
                 payload.url,
@@ -78,7 +79,7 @@ class PostController(
     fun deletePost(
         @PathVariable id: Long,
     ): ResponseEntity<Void> {
-        val loginUser = securityUtils.loginUser()!!
+        val loginUser = securityUtils.getRequiredLoginUser()
         val post = postService.getPostById(id) ?: throw ResourceNotFoundException("Post with id: $id not found")
         checkPrivilege(post, loginUser)
         postService.deletePost(id)
@@ -90,6 +91,8 @@ class PostController(
         loginUser: SecurityUser,
     ) {
         if (!(post.createdBy?.id == loginUser.id || loginUser.isCurrentUserAdmin())) {
+            //Users who don't have access don't need to know it exists
+            //Should we throw UnauthorizedAccess or NotFound??
             throw UnauthorisedAccessException("Unauthorised Access")
         }
     }

@@ -1,6 +1,6 @@
 package com.sivalabs.devzone.config
 
-import com.sivalabs.devzone.auth.TokenAuthFilter
+import com.sivalabs.devzone.auth.JwtAuthFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -15,24 +15,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 class WebSecurityConfig(
-    private val tokenAuthFilter: TokenAuthFilter,
+    private val jwtAuthFilter: JwtAuthFilter,
 ) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http.csrf { csrf -> csrf.disable() }
         http.authorizeHttpRequests { authorize ->
             authorize
-                .requestMatchers("/actuator/**", "/error").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/posts").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/api/posts/*").authenticated()
-                .requestMatchers("/api/me").authenticated()
-                .anyRequest().permitAll()
+                .requestMatchers("/favicon.ico","/actuator/**", "/swagger-ui/**", "v3/api-docs/**", "/error").permitAll()
+                .requestMatchers("/api/login", "/api/users/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
+                .anyRequest().authenticated()
         }
         http.sessionManagement {
                 s ->
             s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         }
-        http.addFilterBefore(tokenAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
     }
 }

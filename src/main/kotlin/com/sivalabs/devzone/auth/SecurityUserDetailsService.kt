@@ -1,6 +1,5 @@
 package com.sivalabs.devzone.auth
 
-import com.sivalabs.devzone.users.domain.UserDetailsDTO
 import com.sivalabs.devzone.users.domain.UserService
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Service
 class SecurityUserDetailsService(private val userService: UserService) : UserDetailsService {
     override fun loadUserByUsername(username: String): UserDetails? {
         return userService.getUserByEmail(username)
-            ?.let { user: UserDetailsDTO ->
+            ?.let { user ->
                 SecurityUser(
                     user.id,
                     user.name,
@@ -20,6 +19,6 @@ class SecurityUserDetailsService(private val userService: UserService) : UserDet
                     user.role,
                 )
             }
-            ?: throw UsernameNotFoundException("No user found with username $username")
+            ?: throw UsernameNotFoundException("User not found with email $username")
     }
 }

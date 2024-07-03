@@ -11,16 +11,16 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 @Transactional
 class DataInitializer(
-    private val applicationProperties: ApplicationProperties,
     private val postService: PostService,
     private val postImportService: PostImportService,
+    private val properties: ApplicationProperties,
 ) : CommandLineRunner {
     private val log = KotlinLogging.logger {}
 
     override fun run(vararg args: String) {
-        if (applicationProperties.importDataEnabled) {
+        if (properties.importDataEnabled) {
             postService.deleteAllPosts()
-            val fileName = applicationProperties.importFilePath
+            val fileName = properties.importFilePath
             postImportService.importPosts(fileName)
         } else {
             log.info { "Data importing is disabled" }

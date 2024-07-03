@@ -19,7 +19,7 @@ class CurrentUserController(
     fun me(): ResponseEntity<UserDTO> {
         val loginUser = securityUtils.loginUser()
         if (loginUser != null) {
-            val userDTO = UserDTO(loginUser.id!!, loginUser.name, loginUser.email, loginUser.role)
+            val userDTO = UserDTO(loginUser.id, loginUser.name, loginUser.email, loginUser.role)
             return ResponseEntity.ok(userDTO)
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()

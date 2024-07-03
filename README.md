@@ -1,6 +1,16 @@
 # DevZone API using Spring Boot + Kotlin
 An implementation of [DevZone API](https://github.com/fullstack-devzone/fullstack-devzone) using Spring Boot.
 
+## Tech Stack
+* Kotlin
+* Spring Boot
+* Spring Security
+* Spring JdbcClient
+* Postgres
+* Gradle Kotlin DSL
+* Testcontainers
+* Docker Compose
+
 ## Prerequisites
 * JDK 21
 * Docker and Docker Compose
