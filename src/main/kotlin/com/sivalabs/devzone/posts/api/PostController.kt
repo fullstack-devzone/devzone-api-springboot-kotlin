@@ -91,8 +91,8 @@ class PostController(
         loginUser: SecurityUser,
     ) {
         if (!(post.createdBy?.id == loginUser.id || loginUser.isCurrentUserAdmin())) {
-            //Users who don't have access don't need to know it exists
-            //Should we throw UnauthorizedAccess or NotFound??
+            // Users who don't have access don't need to know it exists
+            // Should we throw UnauthorizedAccess or NotFound??
             throw UnauthorisedAccessException("Unauthorised Access")
         }
     }

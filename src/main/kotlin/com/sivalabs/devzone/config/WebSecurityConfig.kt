@@ -22,7 +22,7 @@ class WebSecurityConfig(
         http.csrf { csrf -> csrf.disable() }
         http.authorizeHttpRequests { authorize ->
             authorize
-                .requestMatchers("/favicon.ico","/actuator/**", "/swagger-ui/**", "v3/api-docs/**", "/error").permitAll()
+                .requestMatchers("/favicon.ico", "/actuator/**", "/swagger-ui/**", "v3/api-docs/**", "/error").permitAll()
                 .requestMatchers("/api/login", "/api/users/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
                 .anyRequest().authenticated()
