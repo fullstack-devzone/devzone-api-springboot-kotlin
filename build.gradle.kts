@@ -50,7 +50,7 @@ dependencies {
 
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")
-    implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1")
+    implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.2")
     testImplementation("org.springframework.boot:spring-boot-devtools")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
     runtimeOnly("org.postgresql:postgresql")
