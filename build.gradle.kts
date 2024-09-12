@@ -67,7 +67,7 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
     testImplementation("io.rest-assured:rest-assured")
-    testImplementation("org.instancio:instancio-junit:4.8.1")
+    testImplementation("org.instancio:instancio-junit:5.0.2")
 }
 
 kotlin {
